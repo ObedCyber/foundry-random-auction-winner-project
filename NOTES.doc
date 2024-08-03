@@ -1,0 +1,38 @@
+Contract Initialization and Configuration:
+[..] constructor: Sets up initial contract parameters like auction duration, Chainlink VRF configuration, and possibly the minimum bid amount.
+[] setAuctionParameters: (Optional) Allows the contract owner to set or update auction parameters before the auction starts.
+
+Auction Participation:
+[..] registerBidder: Allows users to register as bidders. This might include storing their addresses and other necessary information.
+[..] placeBid: Allows registered bidders to place their bids. This function should include validation checks to ensure that bids meet the required conditions (e.g., minimum bid amount).
+
+
+Auction Management:
+[] startAuction: (Optional) Starts the auction. This function could be used to initialize auction start time.
+[..] endAuction: Ends the auction and initiates the winner selection process. This function should ensure the auction has ended before proceeding.
+
+
+Chainlink VRF Integration:
+[..] requestRandomness: Requests a random number from Chainlink VRF. This function will be called at the end of the auction to get a random number for winner selection.
+[..] fulfillRandomness: Callback function that Chainlink VRF node calls to provide the random number. This function will use the random number to select the auction winner.
+
+
+Winner Selection and Distribution:
+[..] selectWinner: Uses the random number provided by Chainlink VRF to select a winner from the list of bidders.
+[ ] distributePrize: Distributes the auction prize to the winner. This could involve transferring funds or any other assets that are part of the auction prize.
+
+
+Utility Functions:
+[ ] getBidders: Returns a list of all bidders for transparency.
+[ ] getHighestBid: (Optional) Returns the highest bid amount for informational purposes.
+[ ] withdrawFunds: Allows non-winning bidders to withdraw their bids if necessary.
+
+Security and Administration:
+[..] onlyOwner: Modifier to restrict access to certain functions to the contract owner.
+[ ] pauseAuction: (Optional) Allows the contract owner to pause the auction in case of emergencies.
+[ ] resumeAuction: (Optional) Allows the contract owner to resume a paused auction.
+
+Create the ERC-20 Token: Use OpenZeppelin to create a new ERC-20 token.
+Deploy the ERC-20 Token: Deploy the ERC-20 token contract.
+Update the Auction Contract: Integrate the ERC-20 token into your auction contract.
+Deploy and Test the Auction Contract: Deploy the auction contract and test the token transfer functionality.
