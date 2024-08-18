@@ -26,7 +26,7 @@ Before you begin, ensure you have met the following requirements:
 
     ```bash
     git clone https://github.com/ObedCyber/foundry-random-auction-winner-project.git
-    cd random-auction
+    cd foundry-random-auction-winner-project
     ```
 
 2. **Install Foundry:**
