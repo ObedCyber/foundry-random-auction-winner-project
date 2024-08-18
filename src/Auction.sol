@@ -35,7 +35,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Auction is VRFConsumerBaseV2, Ownable {
     /** Errors */
-    error Auction_AddressNotInBiddersArray();
+    error Auction_AddressNotInBiddersArray(address unregisteredBidder);
     error Auction_AlreadyStarted();
     error Auction_BidNotEnough();
     error Auction_ParameterNotComplete(uint256 numBidders, uint256 currentBalance);
@@ -96,7 +96,6 @@ contract Auction is VRFConsumerBaseV2, Ownable {
 
     function registerBidder() external {
         require(!s_isBidder[msg.sender], "Address is already registered");
-
         s_bidders.push(msg.sender);
         s_isBidder[msg.sender] = true;
         emit BidderRegistered(msg.sender);
@@ -106,7 +105,7 @@ contract Auction is VRFConsumerBaseV2, Ownable {
         require(s_auctionState == AuctionState.STARTED, "Auction not started");
         // If msg.sender is not among the array of bidders
         if (!s_isBidder[msg.sender]) {
-            revert Auction_AddressNotInBiddersArray();
+            revert Auction_AddressNotInBiddersArray(msg.sender);
         }
         if (msg.value < i_minimumBid) {
             revert Auction_BidNotEnough();
@@ -171,6 +170,10 @@ contract Auction is VRFConsumerBaseV2, Ownable {
 
         i_myToken.transfer(recentWinner, tokenAmount);
     }
+    /** Setters */
+    function setAuctionStateToEnded() external onlyOwner{
+        s_auctionState = AuctionState.ENDED;
+    }
     
     /** Getters */
     function getBidderBid(address bidder) external view returns (uint256) {
@@ -196,4 +199,11 @@ contract Auction is VRFConsumerBaseV2, Ownable {
     function getLastTimeStamp() external view returns (uint256) {
         return s_lastTimeStamp;
     }
+    function getmyTokenAddress() external view returns (address) {
+        return address(i_myToken);
+    }
+    function getOwner() external view returns (address) {
+        return owner();
+    }
+    
 }
